@@ -44,8 +44,18 @@ public class ConversationHandler extends Thread {
                 count++;
 
             }
-            out.println("NAMEACCEPTED");
+            out.println("NAMEACCEPTED" + name);
             Server.printWriters.add(out);
+
+            while (true) {
+                String message = in.readLine();
+                if (message == null) {
+                    return;
+                }
+                for (PrintWriter writer : Server.printWriters) {
+                    writer.println(name + ": " + message);
+                }
+            }
 
 
 

@@ -9,18 +9,19 @@ import java.net.Socket;
 public class Client {
 
     static JFrame chatWindow = new JFrame("Chat Application");
-    static JTextArea chatArea = new JTextArea(22, 40);
-    static JTextField textField = new JTextField(40);
+    static JTextArea chatArea = new JTextArea(22, 45);
+    static JTextField textField = new JTextField(45);
     static JLabel blankLabel = new JLabel("       ");
     static JButton sendButton = new JButton("Send");
     static BufferedReader in;
     static PrintWriter out;
+    static JLabel nameLabel = new JLabel("        ");
 
 
     Client() {
 
         chatWindow.setLayout(new FlowLayout());
-
+        chatWindow.add(nameLabel);
         chatWindow.add(new JScrollPane(chatArea));
         chatWindow.add(blankLabel);
         chatWindow.add(textField);
@@ -29,9 +30,13 @@ public class Client {
         chatWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         chatWindow.setSize(475, 500);
         chatWindow.setVisible(true);
+        chatWindow.setResizable(false);
 
         textField.setEditable(false);
         chatArea.setEditable(false);
+
+        sendButton.addActionListener(new Listener());
+        textField.addActionListener(new Listener());
 
     }
 
@@ -74,10 +79,14 @@ public class Client {
                         JOptionPane.WARNING_MESSAGE);
 
                 out.println(name);
-            } else if (str.equals("NAMEACCEPTED")) {
+            } else if (str.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
+                System.out.println(str);
+                nameLabel.setText("You are logged in as: " + str.substring(12));
+            } else {
+                chatArea.append(str + "\n");
             }
-            
+
 
         }
     }
